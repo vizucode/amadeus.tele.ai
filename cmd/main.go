@@ -21,7 +21,7 @@ func main() {
 	chai := api.NewchaiML(os.Getenv("DEV_KEY"), os.Getenv("DEV_UID"), os.Getenv("URL_TARGET"))
 
 	// initializing usecase bot
-	teleBot := uc.NewTelegram(chai, os.Getenv("BOT_API_KEY"), false)
+	teleBot := uc.NewTelegram(chai, os.Getenv("BOT_TELE_API_KEY"), false)
 
 	// starting the bot
 	// wg.Add(1)
