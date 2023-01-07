@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 	"os"
-	"sync"
 
 	"amadeus.tele.ai/repositories/api"
 	"amadeus.tele.ai/repositories/localstorage"
@@ -13,8 +12,6 @@ import (
 )
 
 func main() {
-	wg := new(sync.WaitGroup)
-
 	if os.Getenv("ENVIRONMENT") != "production" {
 		err := godotenv.Load(".env")
 		if err != nil {
@@ -33,13 +30,10 @@ func main() {
 	teleBot := uc.NewTelegram(chai, localstorage, os.Getenv("BOT_TELE_API_KEY"), false)
 
 	// starting the bot
-	wg.Add(1)
-	go start(teleBot, wg)
-	wg.Wait()
+	start(teleBot)
 }
 
-func start(chat uc.PlatformUC, wg *sync.WaitGroup) {
-	defer wg.Done()
+func start(chat uc.PlatformUC) {
 	ctx := context.TODO()
 	chat.Chat(ctx)
 }
