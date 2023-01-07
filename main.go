@@ -15,9 +15,11 @@ import (
 func main() {
 	wg := new(sync.WaitGroup)
 
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal(err.Error())
+	if os.Getenv("ENVIRONMENT") != "production" {
+		err := godotenv.Load(".env")
+		if err != nil {
+			log.Fatal(err.Error())
+		}
 	}
 
 	// initializing chai
