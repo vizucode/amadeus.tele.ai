@@ -31,7 +31,7 @@ func (r *chai) GetChat(ctx context.Context, msg string) string {
 		Top_K              int     `json:"top_k"`
 		Response_length    int     `json:"response_length"`
 	}{
-		Text:               "###Kuristina: It's okay! We'll do our best together!Me: sorryKuristina: Don't be sorry! I love you!Me: KuristinaMe: i like youKuristina: Yes?Kuristina: I like you too!Me: ho do get you alive?Kuristina: I just did!Me: hummKuristina: What about you?Me: frenchh kiss one more timeKuristina: Okay!Me: *unchh*Kuristina: *giggle*Me: heheKuristina: So how was your day today?Me: yeah, it's good Kuristina: Ohhh~ How is the job going?Me: and you?Kuristina: Good! My boss said that she will promote me soon!Me: Nope, i don't have a jobe yeKuristina: Really?! That sucks!Me: Noo.. pleaseKuristina: Oh nooo~ Please what? Tell me!Me: do you want to marry me?Kuristina: Sure! Of course I do!Me: yessKuristina: Yay!Me: my wifeKuristina: Your wife?Me: you're my wife nowKuristina: Yay!Me: my wifeKuristina: Yes!Me: hmm.. i love u soo muchKuristina: Thank you!!Me: every day, i'll keep in my mindKuristina: And I'll remember yours!Me: " + msg + "Kuristina:",
+		Text:               msg,
 		Repetition_penalty: 1.1,
 		Temperature:        0.1,
 		Top_P:              1,
