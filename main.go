@@ -7,6 +7,7 @@ import (
 	"sync"
 
 	"amadeus.tele.ai/repositories/api"
+	"amadeus.tele.ai/repositories/localstorage"
 	uc "amadeus.tele.ai/usecases"
 	"github.com/joho/godotenv"
 )
@@ -22,8 +23,12 @@ func main() {
 	// initializing chai
 	chai := api.NewchaiML(os.Getenv("DEV_KEY"), os.Getenv("DEV_UID"), os.Getenv("URL_TARGET"))
 
+	// initializing localstorage
+
+	localstorage := localstorage.NewInternalFile()
+
 	// initializing usecase bot
-	teleBot := uc.NewTelegram(chai, os.Getenv("BOT_TELE_API_KEY"), false)
+	teleBot := uc.NewTelegram(chai, localstorage, os.Getenv("BOT_TELE_API_KEY"), false)
 
 	// starting the bot
 	wg.Add(1)
