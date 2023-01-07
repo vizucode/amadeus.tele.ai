@@ -2,6 +2,7 @@ package api
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"log"
 	"net/http"
@@ -21,7 +22,7 @@ func NewchaiML(dev_key string, dev_uid string, uri_target string) *chai {
 	}
 }
 
-func (r *chai) GetChat(msg string) string {
+func (r *chai) GetChat(ctx context.Context, msg string) string {
 	body := struct {
 		Text               string  `json:"text"`
 		Repetition_penalty float32 `json:"repetition_penalty"`
@@ -44,7 +45,7 @@ func (r *chai) GetChat(msg string) string {
 	}
 
 	// create request
-	httpReq, err := http.NewRequest(http.MethodPost, r.URI_TARGET, bytes.NewBuffer(req))
+	httpReq, err := http.NewRequestWithContext(ctx, http.MethodPost, r.URI_TARGET, bytes.NewBuffer(req))
 	if err != nil {
 		log.Fatal(err.Error())
 	}

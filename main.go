@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"log"
 	"os"
 
@@ -12,7 +13,7 @@ import (
 func main() {
 	// wg := new(sync.WaitGroup)
 
-	err := godotenv.Load("../.env")
+	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -24,11 +25,13 @@ func main() {
 	teleBot := uc.NewTelegram(chai, os.Getenv("BOT_TELE_API_KEY"), false)
 
 	// starting the bot
+
 	// wg.Add(1)
 	start(teleBot)
 	// wg.Wait()
 }
 
 func start(chat uc.PlatformUC) {
-	chat.Chat()
+	ctx := context.TODO()
+	chat.Chat(ctx)
 }

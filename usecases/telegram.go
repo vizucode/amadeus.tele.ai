@@ -1,6 +1,7 @@
 package usecases
 
 import (
+	"context"
 	"log"
 
 	"amadeus.tele.ai/repositories/api"
@@ -30,7 +31,7 @@ func NewTelegram(chai api.Restchai, botKey string, debug bool) *telegramUC {
 	}
 }
 
-func (uc *telegramUC) Chat() {
+func (uc *telegramUC) Chat(ctx context.Context) {
 	u := tgbotapi.NewUpdate(1)
 	u.Timeout = 60
 
@@ -38,7 +39,7 @@ func (uc *telegramUC) Chat() {
 
 	for update := range updates {
 		if update.Message != nil {
-			reply := uc.Chai.GetChat(update.Message.Text)
+			reply := uc.Chai.GetChat(ctx, update.Message.Text)
 			botMsg := tgbotapi.NewMessage(update.Message.From.ID, reply)
 			uc.Bot.Send(botMsg)
 		}
