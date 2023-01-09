@@ -3,9 +3,10 @@ package usecases
 import (
 	"context"
 	"log"
+	"os"
 
 	"amadeus.tele.ai/repositories/api"
-	"amadeus.tele.ai/repositories/localstorage"
+	"amadeus.tele.ai/repositories/database"
 
 	"amadeus.tele.ai/utils/translate"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
@@ -13,11 +14,11 @@ import (
 
 type telegramUC struct {
 	Chai api.Restchai
-	Ls   localstorage.Localstorage
+	Ls   database.Database
 	Bot  *tgbotapi.BotAPI
 }
 
-func NewTelegram(chai api.Restchai, ls localstorage.Localstorage, botKey string, debug bool) *telegramUC {
+func NewTelegram(chai api.Restchai, ls database.Database, botKey string, debug bool) *telegramUC {
 	// initializing bot
 	bot, err := tgbotapi.NewBotAPI(botKey)
 	if err != nil {
@@ -45,7 +46,7 @@ func (uc *telegramUC) Chat(ctx context.Context) {
 		if update.Message != nil {
 
 			// read
-			msg := uc.Ls.Read("memory.json")
+			msg := uc.Ls.Read(os.Getenv("MONGO_COLLECTION"))
 
 			// translate
 			translatedText, err := translate.Translate(update.Message.Text, "auto", "en")
@@ -63,7 +64,7 @@ func (uc *telegramUC) Chat(ctx context.Context) {
 
 			// write
 			msg = msg + "\nMe:" + translatedText + "\nKuristina:" + reply
-			uc.Ls.Write("memory.json", msg)
+			uc.Ls.Write(os.Getenv("MONGO_COLLECTION"), msg)
 
 			// tranlated reply
 			translatedReply, err := translate.Translate(reply, "en", "id")

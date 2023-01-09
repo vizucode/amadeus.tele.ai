@@ -1,6 +1,6 @@
-package localstorage
+package database
 
-type Localstorage interface {
+type Database interface {
 	Read(fileName string) string
 	Write(fileName string, data string)
 }

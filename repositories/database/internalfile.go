@@ -1,4 +1,4 @@
-package localstorage
+package database
 
 import (
 	"encoding/json"

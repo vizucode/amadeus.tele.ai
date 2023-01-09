@@ -6,8 +6,9 @@ import (
 	"os"
 
 	"amadeus.tele.ai/repositories/api"
-	"amadeus.tele.ai/repositories/localstorage"
+	"amadeus.tele.ai/repositories/database"
 	uc "amadeus.tele.ai/usecases"
+	mongoCLI "amadeus.tele.ai/utils/connection"
 	"github.com/joho/godotenv"
 )
 
@@ -22,12 +23,12 @@ func main() {
 	// initializing chai
 	chai := api.NewchaiML(os.Getenv("DEV_KEY"), os.Getenv("DEV_UID"), os.Getenv("URL_TARGET"))
 
-	// initializing localstorage
-
-	localstorage := localstorage.NewInternalFile()
+	// initializing database
+	mongoCli := mongoCLI.MongoCon(os.Getenv("MONGO_DBNAME"))
+	db := database.NewMongo(mongoCli)
 
 	// initializing usecase bot
-	teleBot := uc.NewTelegram(chai, localstorage, os.Getenv("BOT_TELE_API_KEY"), false)
+	teleBot := uc.NewTelegram(chai, db, os.Getenv("BOT_TELE_API_KEY"), false)
 
 	// starting the bot
 	start(teleBot)
