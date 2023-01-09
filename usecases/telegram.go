@@ -7,6 +7,7 @@ import (
 	"amadeus.tele.ai/repositories/api"
 	"amadeus.tele.ai/repositories/localstorage"
 
+	"amadeus.tele.ai/utils/translate"
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
@@ -45,17 +46,31 @@ func (uc *telegramUC) Chat(ctx context.Context) {
 
 			// read
 			msg := uc.Ls.Read("memory.json")
-			tempMsg := msg + "\nMe:" + update.Message.Text + "\nKuristina:"
+
+			// translate
+			translatedText, err := translate.Translate(update.Message.Text, "auto", "en")
+
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+
+			tempMsg := msg + "\nMe:" + translatedText + "\nKuristina:"
 			reply := uc.Chai.GetChat(ctx, tempMsg)
 			if reply == "" {
 				reply = "i'm stuck.."
 			}
 
 			// write
-			msg = msg + "\nMe:" + update.Message.Text + "\nKuristina:" + reply
+			msg = msg + "\nMe:" + translatedText + "\nKuristina:" + reply
 			uc.Ls.Write("memory.json", msg)
 
-			botMsg := tgbotapi.NewMessage(update.Message.From.ID, reply)
+			// tranlated reply
+			translatedReply, err := translate.Translate(reply, "en", "id")
+			if err != nil {
+				log.Fatal(err.Error())
+			}
+
+			botMsg := tgbotapi.NewMessage(update.Message.From.ID, translatedReply)
 			uc.Bot.Send(botMsg)
 		}
 	}
