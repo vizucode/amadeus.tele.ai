@@ -58,7 +58,10 @@ func (uc *telegramUC) Chat(ctx context.Context) {
 			tempMsg := msg + "\nMe:" + translatedText + "\nKuristina:"
 			reply := uc.Chai.GetChat(ctx, tempMsg)
 			log.Println(reply)
+
 			if reply == "" {
+				msg = "###\nMe:" + tempMsg + "\nKurisutina:"
+				uc.Ls.Write(os.Getenv("MONGO_COLLECTION"), msg)
 				reply = "i'm stuck.."
 			}
 
