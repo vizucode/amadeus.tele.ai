@@ -59,12 +59,6 @@ func (uc *telegramUC) Chat(ctx context.Context) {
 			reply := uc.Chai.GetChat(ctx, tempMsg)
 			log.Println(reply)
 
-			if reply == "" {
-				msg = "###\nMe:" + tempMsg + "\nKurisutina:"
-				uc.Ls.Write(os.Getenv("MONGO_COLLECTION"), msg)
-				reply = "i'm stuck.."
-			}
-
 			// write
 			msg = msg + "\nMe:" + translatedText + "\nKuristina:" + reply
 			uc.Ls.Write(os.Getenv("MONGO_COLLECTION"), msg)
@@ -73,6 +67,12 @@ func (uc *telegramUC) Chat(ctx context.Context) {
 			translatedReply, err := translate.Translate(reply, "en", "id")
 			if err != nil {
 				log.Fatal(err.Error())
+			}
+
+			if reply == "" {
+				msg = "###\nMe:" + tempMsg + "\nKurisutina:"
+				uc.Ls.Write(os.Getenv("MONGO_COLLECTION"), msg)
+				reply = "i'm stuck.."
 			}
 
 			botMsg := tgbotapi.NewMessage(update.Message.From.ID, translatedReply)
